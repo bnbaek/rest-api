@@ -2,14 +2,17 @@ package net.openu.api.v1.account;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.openu.api.v1.account.AccountDto.SignUpReq;
+import net.openu.core.domain.account.Account;
 import net.openu.service.AccountService;
 import org.junit.Before;
 import org.junit.Test;
@@ -70,6 +73,33 @@ public class AccountControllerTest {
     ;
 
   }
+
+  @Test
+  public void getAccount() throws Exception {
+    //given
+    final AccountDto.SignUpReq request = buildSignUpRequest();
+    Account account = request.toEntity();
+    given(accountService.getAccount(anyString())).willReturn(account);
+    //when
+    final ResultActions resultActions = requestGetAccount(account.getCode());
+
+    //then
+    //then
+    resultActions
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.address1", is(request.getAddress1())))
+        .andExpect(jsonPath("$.address2", is(request.getAddress2())))
+        .andExpect(jsonPath("$.email", is(request.getEmail())))
+        .andExpect(jsonPath("$.firstName", is(request.getFirstName())))
+        .andExpect(jsonPath("$.lastName", is(request.getLastName())));
+  }
+
+  private ResultActions requestGetAccount(String code) throws Exception {
+    return mockMvc.perform(get("/api/accounts/" + code)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print());
+  }
+
 
   private ResultActions requestSignUp(SignUpReq request) throws Exception {
     return mockMvc.perform(post("/api/accounts")

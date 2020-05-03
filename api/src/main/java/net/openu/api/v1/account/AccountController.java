@@ -1,8 +1,10 @@
 package net.openu.api.v1.account;
 
 import lombok.RequiredArgsConstructor;
+import net.openu.api.v1.account.AccountDto.Response;
 import net.openu.service.AccountService;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,5 +28,11 @@ public class AccountController {
   @ResponseStatus(value = HttpStatus.CREATED)
   public AccountDto.Response signUp(@RequestBody final AccountDto.SignUpReq request) {
     return AccountDto.Response.of(accountService.create(request));
+  }
+
+  @RequestMapping(value = "/{code}", method = RequestMethod.GET)
+  @ResponseStatus(value = HttpStatus.OK)
+  public AccountDto.Response getUser(@PathVariable final String code) {
+    return AccountDto.Response.of(accountService.getAccount(code));
   }
 }
