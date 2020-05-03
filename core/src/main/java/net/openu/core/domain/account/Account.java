@@ -1,6 +1,7 @@
 package net.openu.core.domain.account;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import net.openu.core.common.utils.StringUtils;
 
 @Entity
 @Table(name = "account")
@@ -22,6 +24,9 @@ public class Account {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "account_id", updatable = false, unique = true)
   private Long id;
+
+  @Column(name = "account_code", updatable = false, unique = true)
+  private String code;
 
   @Column(name = "email", nullable = false, unique = true)
   private String email;
@@ -56,6 +61,7 @@ public class Account {
     this.zipCode = zipCode;
     this.createdAt = LocalDateTime.now();
     this.updatedAt = LocalDateTime.now();
+    this.code = StringUtils.getUuidString();
   }
 
 

@@ -1,5 +1,6 @@
 package net.openu.api.v1.account;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -49,9 +50,12 @@ public class AccountDto {
     }
   }
 
+
   @Getter
+  @JsonPropertyOrder(value = {"code","email"})
   public static class Response {
 
+    private String code;
     private String email;
     private String firstName;
     private String lastName;
@@ -60,6 +64,7 @@ public class AccountDto {
     private String zipCode;
 
     public Response(Account account) {
+      this.code = account.getCode();
       this.email = account.getEmail();
       this.firstName = account.getFirstName();
       this.lastName = account.getLastName();
