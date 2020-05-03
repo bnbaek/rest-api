@@ -1,0 +1,95 @@
+buildscript {
+  ext {
+    springBootVersion = '2.2.5.RELEASE'
+    querydslPluginVersion = '1.0.10'
+  }
+  repositories {
+    mavenCentral()
+    maven { url "https://plugins.gradle.org/m2/" }
+  }
+  dependencies {
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    classpath "io.spring.gradle:dependency-management-plugin:1.0.9.RELEASE"
+    classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${querydslPluginVersion}")
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+  }
+
+
+}
+
+
+subprojects {
+  apply plugin: 'java'
+  apply plugin: 'org.springframework.boot'
+  apply plugin: 'io.spring.dependency-management'
+
+
+  repositories {
+    mavenCentral()
+  }
+
+
+  group = 'net.openu'
+  version = '0.0.1-SNAPSHOT'
+  sourceCompatibility = '11'
+
+  dependencies {
+    implementation('org.projectlombok:lombok')
+    annotationProcessor('org.projectlombok:lombok')
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+      exclude module: "junit" // JUnit4 제거, 스프링 부트 2.2.0 부터 JUnit5 적용
+    }
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testImplementation("org.junit.jupiter:junit-jupiter-params")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    testCompileOnly('junit:junit')
+    testRuntimeOnly('org.junit.vintage:junit-vintage-engine') {
+      because 'JUni 3 와 JUnit 4 테스트 실행을 위해 필요핟.'
+    }
+  }
+
+  test {
+    useJUnitPlatform()
+  }
+
+
+
+}
+
+def queryDslProjects = [project(':core')]
+configure(queryDslProjects) {
+
+  def queryDslSrcDir = 'build/main/generated'
+
+  apply plugin: "com.ewerk.gradle.plugins.querydsl"
+
+  querydsl {
+    library = "com.querydsl:querydsl-apt"
+    jpa = true
+    querydslSourcesDir = queryDslSrcDir
+  }
+
+  sourceSets {
+    main {
+      java {
+        srcDirs = ['src/main/java', queryDslSrcDir]
+      }
+    }
+  }
+  dependencies {
+    compile("com.querydsl:querydsl-jpa")
+    compile("com.querydsl:querydsl-apt")
+  }
+
+  compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+  }
+
+  configurations {
+    compileOnly {
+      extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
+  }
+}
