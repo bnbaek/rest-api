@@ -1,7 +1,8 @@
 package net.openu.api.v1.account;
 
 import lombok.RequiredArgsConstructor;
-import net.openu.api.v1.account.AccountDto.Response;
+import net.openu.core.domain.account.AccountDto;
+import net.openu.core.domain.account.AccountDto.UpdateAddressReq;
 import net.openu.service.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,5 +35,11 @@ public class AccountController {
   @ResponseStatus(value = HttpStatus.OK)
   public AccountDto.Response getUser(@PathVariable final String code) {
     return AccountDto.Response.of(accountService.getAccount(code));
+  }
+
+  @RequestMapping(value = "/{code}/address", method = RequestMethod.PUT)
+  @ResponseStatus(value = HttpStatus.OK)
+  public AccountDto.Response updateMyAccount(@PathVariable final String code, @RequestBody final UpdateAddressReq request) {
+    return AccountDto.Response.of(accountService.updateAddress(code,request));
   }
 }

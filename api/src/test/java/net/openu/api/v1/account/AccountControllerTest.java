@@ -11,7 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.openu.api.v1.account.AccountDto.SignUpReq;
+import net.openu.core.domain.account.AccountDto;
+import net.openu.core.domain.account.AccountDto.SignUpReq;
 import net.openu.core.domain.account.Account;
 import net.openu.service.AccountService;
 import org.junit.Before;

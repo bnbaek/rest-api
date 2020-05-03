@@ -6,8 +6,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 import java.util.Optional;
-import net.openu.api.v1.account.AccountDto;
-import net.openu.api.v1.account.AccountDto.SignUpReq;
+import net.openu.core.domain.account.AccountDto;
+import net.openu.core.domain.account.AccountDto.SignUpReq;
 import net.openu.core.common.exception.AccountNotFoundException;
 import net.openu.core.domain.account.Account;
 import net.openu.core.domain.account.AccountRepository;

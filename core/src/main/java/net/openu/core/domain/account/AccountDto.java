@@ -1,11 +1,10 @@
-package net.openu.api.v1.account;
+package net.openu.core.domain.account;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import net.openu.core.domain.account.Account;
 
 /**
  * Created by iopenu@gmail.com on 2020/05/03
@@ -52,7 +51,7 @@ public class AccountDto {
 
 
   @Getter
-  @JsonPropertyOrder(value = {"code","email"})
+  @JsonPropertyOrder(value = {"code", "email"})
   public static class Response {
 
     private String code;
@@ -77,6 +76,26 @@ public class AccountDto {
     public static Response of(Account account) {
       return new Response(account);
 
+    }
+  }
+
+  @Getter
+  @NoArgsConstructor(access = AccessLevel.PROTECTED)
+  public static class UpdateAddressReq {
+
+    private String address1;
+    private String address2;
+    private String zipCode;
+
+    @Builder
+    public UpdateAddressReq(String address1, String address2, String zipCode) {
+      this.address1 = address1;
+      this.address2 = address2;
+      this.zipCode = zipCode;
+    }
+
+    public Account apply(Account account){
+      return account.updateAddress(this);
     }
   }
 }

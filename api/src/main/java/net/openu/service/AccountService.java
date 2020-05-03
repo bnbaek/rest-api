@@ -1,9 +1,10 @@
 package net.openu.service;
 
 import lombok.RequiredArgsConstructor;
-import net.openu.api.v1.account.AccountDto;
 import net.openu.core.common.exception.AccountNotFoundException;
 import net.openu.core.domain.account.Account;
+import net.openu.core.domain.account.AccountDto.UpdateAddressReq;
+import net.openu.core.domain.account.AccountDto.SignUpReq;
 import net.openu.core.domain.account.AccountRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,7 @@ public class AccountService {
   private final AccountRepository accountRepository;
 
   @Transactional
-  public Account create(AccountDto.SignUpReq request) {
+  public Account create(SignUpReq request) {
     return accountRepository.save(request.toEntity());
   }
 
@@ -28,4 +29,10 @@ public class AccountService {
     return accountRepository.findByCode(code).orElseThrow(() -> new AccountNotFoundException(code));
   }
 
+  @Transactional
+  public Account updateAddress(String code, UpdateAddressReq request) {
+    return accountRepository.findByCode(code)
+        .map(request::apply)
+        .orElseThrow(()-> new AccountNotFoundException(code));
+  }
 }
