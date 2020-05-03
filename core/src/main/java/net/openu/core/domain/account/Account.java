@@ -1,7 +1,6 @@
 package net.openu.core.domain.account;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +12,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import net.openu.core.common.utils.StringUtils;
+import net.openu.core.domain.account.AccountDto.UpdateAddressReq;
 
 @Entity
 @Table(name = "account")
@@ -64,5 +64,13 @@ public class Account {
     this.code = StringUtils.getUuidString();
   }
 
+  public Account updateAddress(UpdateAddressReq request) {
+    this.zipCode = request.getZipCode();
+    this.address1 = request.getAddress1();
+    this.address2 = request.getAddress2();
+    this.updatedAt = LocalDateTime.now();
+    return this;
+
+  }
 
 }

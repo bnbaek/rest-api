@@ -8,6 +8,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
     compile('javax.validation:validation-api:2.0.1.Final')
     compile('org.hibernate.validator:hibernate-validator:6.0.7.Final')
+    compile('com.fasterxml.jackson.core:jackson-annotations:2.11.0')
     runtimeOnly 'org.postgresql:postgresql'
     runtimeOnly('com.h2database:h2')
 }
