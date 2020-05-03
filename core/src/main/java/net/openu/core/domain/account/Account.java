@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -42,6 +43,7 @@ public class Account {
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
 
+  @Builder
   public Account(Long id, String email, String firstName, String lastName, String password, String address1, String address2,
       String zipCode) {
     this.id = id;
@@ -55,8 +57,6 @@ public class Account {
     this.createdAt = LocalDateTime.now();
     this.updatedAt = LocalDateTime.now();
   }
-
-//  public void updateAddress()
 
 
 }
